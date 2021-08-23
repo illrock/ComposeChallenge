@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ComposeChallenge</string>
+
+    <string name="feed_error_loading">Oops, something went wrong. Try again later</string>
+</resources>
