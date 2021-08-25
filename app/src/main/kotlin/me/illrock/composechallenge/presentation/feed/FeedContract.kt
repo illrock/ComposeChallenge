@@ -10,6 +10,7 @@ import moxy.viewstate.strategy.StateStrategyType
 class FeedContract {
     @StateStrategyType(AddToEndSingleStrategy::class)
     interface View : MvpView {
+        fun showLoading()
         fun showContent(cards: List<BaseCard>)
 
         @StateStrategyType(OneExecutionStateStrategy::class)

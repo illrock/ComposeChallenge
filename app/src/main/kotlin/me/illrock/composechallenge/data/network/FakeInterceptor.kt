@@ -1,5 +1,6 @@
 package me.illrock.composechallenge.data.network
 
+import android.os.SystemClock
 import me.illrock.composechallenge.BuildConfig
 import me.illrock.composechallenge.R
 import me.illrock.composechallenge.presentation.app.App
@@ -12,6 +13,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+/**
+ * Very handy to test app with local raw json response.
+ * Just add this interceptor to the end of your OkHttpClient.Builder() chain
+ * */
 class FakeInterceptor : Interceptor {
 
     @Throws(IOException::class)
@@ -19,6 +24,10 @@ class FakeInterceptor : Interceptor {
 
         return if (BuildConfig.DEBUG && chain.request().url.encodedPath.contains("test/home")) {
 
+            // Simulate loading delay
+            SystemClock.sleep(2000)
+
+            // Use any raw json file here
             val inputStream = App.appComponent.applicationContext().resources.openRawResource(R.raw.feed_response)
             val response = BufferedReader(InputStreamReader(inputStream)).use(BufferedReader::readText)
 

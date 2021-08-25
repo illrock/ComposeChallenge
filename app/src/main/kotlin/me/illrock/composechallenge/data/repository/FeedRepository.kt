@@ -38,8 +38,8 @@ class FeedRepository @Inject constructor(
         else getFromDb()
     }
 
+    /** Should use database(Room for example) with proper entities. Using prefs for simplicity */
     private fun getFromDb(): Single<FeedResponse> {
-        // Should use database(Room) with proper entities. Using prefs for simplicity
         val cachedResponse = moshi.fromJson<FeedResponse>(preferencesManager.getString(PREF_FEED_LAST_RESPONSE))
             ?: FeedResponse(FeedResponse.Page(listOf()))
         return Single.just(cachedResponse)

@@ -23,6 +23,7 @@ class FeedPresenter @Inject constructor(
         feedRepository.get(isForce)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { viewState.showLoading() }
             .subscribe(
                 { viewState.showContent(it.page.cards) },
                 {

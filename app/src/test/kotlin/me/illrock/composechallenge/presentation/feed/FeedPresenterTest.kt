@@ -41,8 +41,12 @@ class FeedPresenterTest {
 
         verify(feedRepository, times(1))
             .get(false)
-        verify(viewState, times(1))
-            .showContent(listOf())
+        inOrder(viewState) {
+            verify(viewState, times(1))
+                .showLoading()
+            verify(viewState, times(1))
+                .showContent(listOf())
+        }
         verify(viewState, never())
             .showError(R.string.feed_error_loading)
     }
@@ -54,8 +58,12 @@ class FeedPresenterTest {
 
         verify(feedRepository, times(1))
             .get(true)
-        verify(viewState, times(1))
-            .showContent(listOf())
+        inOrder(viewState) {
+            verify(viewState, times(1))
+                .showLoading()
+            verify(viewState, times(1))
+                .showContent(listOf())
+        }
         verify(viewState, never())
             .showError(R.string.feed_error_loading)
     }

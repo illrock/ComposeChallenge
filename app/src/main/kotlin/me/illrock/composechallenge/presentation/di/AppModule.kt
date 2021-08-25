@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import me.illrock.composechallenge.BuildConfig
 import me.illrock.composechallenge.data.network.ApiService
+import me.illrock.composechallenge.data.network.FakeInterceptor
 import me.illrock.composechallenge.data.network.adapter.FeedCardAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -27,6 +28,7 @@ class AppModule {
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+//        .addInterceptor(FakeInterceptor())
         .build()
 
     @Singleton

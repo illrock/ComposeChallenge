@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import me.illrock.composechallenge.presentation.feed.FeedPresenter
+import me.illrock.composechallenge.presentation.main.MainPresenter
 import javax.inject.Singleton
 
 @Singleton
@@ -18,5 +19,6 @@ interface AppComponent {
     }
 
     fun applicationContext(): Context
+    fun mainPresenter(): MainPresenter
     fun feedPresenter(): FeedPresenter
 }

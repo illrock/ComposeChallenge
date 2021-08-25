@@ -100,6 +100,7 @@ class FeedRepositoryTest {
     fun get_cache_notOutdated() {
         val testObserver = feedRepository.get(false).test()
         schedulerRule.triggerActions()
+
         testObserver
             .assertNoErrors()
             .assertComplete()
@@ -124,6 +125,34 @@ class FeedRepositoryTest {
 
         val testObserver = feedRepository.get(false).test()
         schedulerRule.triggerActions()
+
+        testObserver
+            .assertNoErrors()
+            .assertComplete()
+            .assertValue(createEmptyResponse())
+        verify(apiService, times(1))
+            .getFeed()
+        verify(preferencesManager, never())
+            .getString(PREF_FEED_LAST_RESPONSE, "")
+        verify(preferencesManager, times(1))
+            .getLong(PREF_FEED_LAST_UPDATE_TIME, 0L)
+        verify(preferencesManager, times(1))
+            .putString(PREF_FEED_LAST_RESPONSE, "")
+        verify(preferencesManager, times(1))
+            .putLong(PREF_FEED_LAST_UPDATE_TIME, outdatedTime)
+    }
+
+    @Test
+    fun get_cache_outdated_corrupted() {
+        val outdatedTime = CACHE_LIFETIME + 1
+        whenever(systemClockProvider.elapsedRealtime())
+            .thenReturn(outdatedTime)
+        whenever(preferencesManager.getString(PREF_FEED_LAST_RESPONSE))
+            .thenReturn("abracadabra")
+
+        val testObserver = feedRepository.get(false).test()
+        schedulerRule.triggerActions()
+
         testObserver
             .assertNoErrors()
             .assertComplete()
