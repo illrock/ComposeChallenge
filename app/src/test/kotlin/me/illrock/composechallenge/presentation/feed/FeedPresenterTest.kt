@@ -5,7 +5,10 @@ import io.reactivex.rxjava3.core.Single
 import me.illrock.composechallenge.R
 import me.illrock.composechallenge.data.repository.FeedRepository
 import me.illrock.composechallenge.data.response.FeedResponse
-import me.illrock.composechallenge.presentation.feed.adapter.viewholder.TextCardViewObject
+import me.illrock.composechallenge.presentation.feed.mvp.adapter.viewholder.TextCardViewObject
+import me.illrock.composechallenge.presentation.feed.mvp.FeedContract
+import me.illrock.composechallenge.presentation.feed.mvp.FeedPresenter
+import me.illrock.composechallenge.presentation.feed.mvp.`FeedContract$View$$State`
 import me.illrock.composechallenge.rule.RxTestSchedulerRule
 import me.illrock.composechallenge.utils.Mocks
 import org.junit.Before

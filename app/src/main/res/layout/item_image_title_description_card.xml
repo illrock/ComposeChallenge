@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.feed.adapter.viewholder.ImageTitleDescriptionCardViewHolder"
+    tools:context=".presentation.feed.mvp.adapter.viewholder.ImageTitleDescriptionCardViewHolder"
     >
 
     <androidx.appcompat.widget.AppCompatImageView

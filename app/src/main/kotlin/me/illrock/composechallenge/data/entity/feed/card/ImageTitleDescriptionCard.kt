@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import me.illrock.composechallenge.data.entity.feed.card.content.ImageContent
 import me.illrock.composechallenge.data.entity.feed.card.content.TextContent
-import me.illrock.composechallenge.presentation.feed.adapter.viewholder.ImageTitleDescriptionCardViewObject
+import me.illrock.composechallenge.presentation.feed.mvp.adapter.viewholder.ImageTitleDescriptionCardViewObject
 import me.illrock.composechallenge.presentation.safeParseColor
 
 @JsonClass(generateAdapter = true)

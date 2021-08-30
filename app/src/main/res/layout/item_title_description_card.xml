@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/padding_standard"
-    tools:context=".presentation.feed.adapter.viewholder.TitleDescriptionCardViewHolder"
+    tools:context=".presentation.feed.mvp.adapter.viewholder.TitleDescriptionCardViewHolder"
     >
 
     <androidx.appcompat.widget.AppCompatTextView

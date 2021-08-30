@@ -1,4 +1,4 @@
-package me.illrock.composechallenge.presentation.feed.adapter.viewholder
+package me.illrock.composechallenge.presentation.feed.mvp.adapter.viewholder
 
 import android.view.ViewGroup
 import android.widget.TextView

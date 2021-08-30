@@ -1,4 +1,4 @@
-package me.illrock.composechallenge.presentation.feed
+package me.illrock.composechallenge.presentation.feed.mvp
 
 import androidx.annotation.StringRes
 import me.illrock.composechallenge.data.entity.feed.card.BaseCard

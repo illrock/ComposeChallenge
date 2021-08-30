@@ -1,4 +1,4 @@
-package me.illrock.composechallenge.presentation.feed
+package me.illrock.composechallenge.presentation.feed.mvvm
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,9 +23,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import dagger.hilt.android.AndroidEntryPoint
 import me.illrock.composechallenge.data.entity.feed.card.BaseCard
 import me.illrock.composechallenge.data.entity.feed.card.ImageTitleDescriptionCard
 import me.illrock.composechallenge.data.entity.feed.card.TextCard
@@ -33,16 +36,12 @@ import me.illrock.composechallenge.data.entity.feed.card.TitleDescriptionCard
 import me.illrock.composechallenge.data.entity.feed.card.content.ImageContent
 import me.illrock.composechallenge.data.entity.feed.card.content.TextContent
 import me.illrock.composechallenge.presentation.ComposeConstants
-import me.illrock.composechallenge.presentation.app.App
 import me.illrock.composechallenge.presentation.safeParseColor
 import me.illrock.composechallenge.utils.toDp
-import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
 
-class FeedComposeFragment : MvpAppCompatFragment(), FeedContract.View {
-    private val presenter by moxyPresenter {
-        App.appComponent.feedPresenter()
-    }
+@AndroidEntryPoint
+class FeedComposeFragment : Fragment() {
+    private val viewModel: FeedViewModel by viewModels()
 
     private var cardItems = mutableStateOf<List<BaseCard>>(listOf())
     private var isLoading = mutableStateOf(false)
@@ -56,24 +55,24 @@ class FeedComposeFragment : MvpAppCompatFragment(), FeedContract.View {
         setContent { FeedScreen() }
     }
 
-    override fun showLoading() {
+    /*override*/ fun showLoading() {
         if (cardItems.value.isEmpty()) isLoading.value = true
         else isRefreshing.value = true
     }
 
-    override fun showContent(cards: List<BaseCard>) {
+    /*override*/ fun showContent(cards: List<BaseCard>) {
         cardItems.value = cards
         isRefreshing.value = false
         isLoading.value = false
     }
 
-    override fun showError(message: Int) {
+    /*override*/ fun showError(message: Int) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         isRefreshing.value = false
         isLoading.value = false
     }
 
-    override fun showToast(message: String) {
+    /*override*/ fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -87,7 +86,7 @@ class FeedComposeFragment : MvpAppCompatFragment(), FeedContract.View {
     @Composable
     private fun FeedContent() = SwipeRefresh(
         rememberSwipeRefreshState(isRefreshing.value),
-        onRefresh = { presenter.onPullRefresh() },
+        onRefresh = { /*presenter.onPullRefresh()*/ },
         Modifier.background(Color.White)
     ) {
         CardList(cardItems)

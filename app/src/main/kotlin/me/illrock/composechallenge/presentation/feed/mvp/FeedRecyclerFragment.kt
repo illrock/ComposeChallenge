@@ -1,4 +1,4 @@
-package me.illrock.composechallenge.presentation.feed
+package me.illrock.composechallenge.presentation.feed.mvp
 
 import android.os.Bundle
 import android.view.View
@@ -7,17 +7,25 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import dagger.hilt.android.AndroidEntryPoint
 import me.illrock.composechallenge.R
 import me.illrock.composechallenge.data.entity.feed.card.BaseCard
-import me.illrock.composechallenge.presentation.app.App
-import me.illrock.composechallenge.presentation.feed.adapter.CardsAdapter
+import me.illrock.composechallenge.presentation.feed.mvp.adapter.CardsAdapter
 import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedRecyclerFragment : MvpAppCompatFragment(R.layout.fragment_feed), FeedContract.View {
-    private val presenter by moxyPresenter {
-        App.appComponent.feedPresenter()
-    }
+    @Inject
+    lateinit var hiltPresenter: FeedPresenter
+
+    @InjectPresenter
+    lateinit var presenter: FeedPresenter
+
+    @ProvidePresenter
+    fun providePresenter() = hiltPresenter
 
     private lateinit var srlPull: SwipeRefreshLayout
     private lateinit var rvCards: RecyclerView

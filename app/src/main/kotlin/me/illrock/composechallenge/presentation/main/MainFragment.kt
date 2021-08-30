@@ -4,17 +4,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import me.illrock.composechallenge.R
-import me.illrock.composechallenge.presentation.app.App
-import me.illrock.composechallenge.presentation.feed.FeedComposeFragment
-import me.illrock.composechallenge.presentation.feed.FeedRecyclerFragment
+import me.illrock.composechallenge.presentation.feed.mvp.FeedRecyclerFragment
+import me.illrock.composechallenge.presentation.feed.mvvm.FeedComposeFragment
 import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainContract.View {
-    private val presenter by moxyPresenter {
-        App.appComponent.mainPresenter()
-    }
+    @Inject
+    lateinit var hiltPresenter: MainPresenter
+
+    @InjectPresenter
+    lateinit var presenter: MainPresenter
+
+    @ProvidePresenter
+    fun providePresenter() = hiltPresenter
 
     private lateinit var btnRecycler: View
     private lateinit var btnCompose: View

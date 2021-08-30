@@ -6,6 +6,9 @@ import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import me.illrock.composechallenge.BuildConfig
 import me.illrock.composechallenge.data.network.ApiService
 import me.illrock.composechallenge.data.network.FakeInterceptor
@@ -17,21 +20,19 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 class AppModule {
 
-    @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideHttpClient(/*@ApplicationContext context: Context*/): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-//        .addInterceptor(FakeInterceptor())
+//        .addInterceptor(FakeInterceptor(context))
         .build()
 
-    @Singleton
     @Provides
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
@@ -39,7 +40,6 @@ class AppModule {
             .build()
     }
 
-    @Singleton
     @Provides
     fun provideApiService(httpClient: OkHttpClient, moshi: Moshi): ApiService {
         return Retrofit.Builder()
@@ -51,7 +51,6 @@ class AppModule {
             .create(ApiService::class.java)
     }
 
-    @Singleton
     @Provides
     fun providePicasso(context: Context, okHttpClient: OkHttpClient): Picasso {
         val picassoHttpClient = okHttpClient.newBuilder()
