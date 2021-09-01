@@ -71,8 +71,9 @@ class FeedRepositoryTest {
 
     @Test
     fun get_force_error() {
+        val expectedException = Exception("Wow such an exception")
         whenever(apiService.getFeed())
-            .thenReturn(Single.error(Exception()))
+            .thenReturn(Single.error(expectedException))
         val expectedCacheResponse = FeedResponse(FeedResponse.Page(listOf(Mocks.getTextCardMock())))
         whenever(moshiAdapter.fromJson(""))
             .thenReturn(expectedCacheResponse)
@@ -81,12 +82,12 @@ class FeedRepositoryTest {
         schedulerRule.triggerActions()
 
         testObserver
-            .assertNoErrors()
-            .assertComplete()
-            .assertValue(expectedCacheResponse)
+            .assertError(expectedException)
+            .assertNotComplete()
+            .assertNoValues()
         verify(apiService, times(1))
             .getFeed()
-        verify(preferencesManager, times(1))
+        verify(preferencesManager, never())
             .getString(PREF_FEED_LAST_RESPONSE, "")
         verify(preferencesManager, never())
             .getLong(PREF_FEED_LAST_UPDATE_TIME, 0L)

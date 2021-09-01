@@ -9,6 +9,7 @@ fun Throwable.print() = if (BuildConfig.DEBUG) printStackTrace() else Unit
 inline fun <reified T> Moshi.fromJson(json: String): T? = try {
     adapter(T::class.java).fromJson(json)
 } catch (e: Exception) {
+    e.print()
     null
 }
 

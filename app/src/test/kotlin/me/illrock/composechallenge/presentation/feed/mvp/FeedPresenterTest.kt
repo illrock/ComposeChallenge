@@ -1,4 +1,4 @@
-package me.illrock.composechallenge.presentation.feed
+package me.illrock.composechallenge.presentation.feed.mvp
 
 import com.nhaarman.mockitokotlin2.*
 import io.reactivex.rxjava3.core.Single

@@ -12,8 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,55 +41,41 @@ import me.illrock.composechallenge.utils.toDp
 
 @AndroidEntryPoint
 class FeedComposeFragment : Fragment() {
-    private val viewModel: FeedViewModel by viewModels()
-
-    private var cardItems = mutableStateOf<List<BaseCard>>(listOf())
-    private var isLoading = mutableStateOf(false)
-    private var isRefreshing = mutableStateOf(false)
+    private val vm : FeedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        setContent { FeedScreen() }
-    }
-
-    /*override*/ fun showLoading() {
-        if (cardItems.value.isEmpty()) isLoading.value = true
-        else isRefreshing.value = true
-    }
-
-    /*override*/ fun showContent(cards: List<BaseCard>) {
-        cardItems.value = cards
-        isRefreshing.value = false
-        isLoading.value = false
-    }
-
-    /*override*/ fun showError(message: Int) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        isRefreshing.value = false
-        isLoading.value = false
-    }
-
-    /*override*/ fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        setContent { FeedScreen(vm) }
+        if (savedInstanceState == null) vm.updateFeed(false)
     }
 
     @Composable
-    private fun FeedScreen() {
+    private fun FeedScreen(vm: FeedViewModel) {
         // Should apply app theme over here, and then use colors from it everywhere
-        if (isLoading.value) LoadingProgress()
-        else FeedContent()
+        val isLoading: Boolean by vm.isLoading.observeAsState(false)
+        if (isLoading) LoadingProgress()
+        else FeedContent(vm)
+
+        val errorRes: Int? by vm.errorRes.observeAsState(null)
+        errorRes?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     @Composable
-    private fun FeedContent() = SwipeRefresh(
-        rememberSwipeRefreshState(isRefreshing.value),
-        onRefresh = { /*presenter.onPullRefresh()*/ },
-        Modifier.background(Color.White)
-    ) {
-        CardList(cardItems)
+    private fun FeedContent(vm: FeedViewModel) {
+        val isRefreshing: Boolean by vm.isRefreshing.observeAsState(false)
+        val cards: List<BaseCard> by vm.cards.observeAsState(listOf())
+        SwipeRefresh(
+            rememberSwipeRefreshState(isRefreshing),
+            onRefresh = { vm.updateFeed(true) },
+            Modifier.background(Color.White)
+        ) {
+            CardList(cards)
+        }
     }
 }
 
@@ -101,8 +87,8 @@ fun LoadingProgress() = Box(Modifier.background(Color.White), Alignment.Center) 
 }
 
 @Composable
-fun CardList(cardItems: MutableState<List<BaseCard>>) = LazyColumn {
-    cardItems.value.forEach {
+fun CardList(cards: List<BaseCard>) = LazyColumn {
+    cards.forEach {
         when (it) {
             is TextCard -> item { TextCardItem(it) }
             is TitleDescriptionCard -> item {

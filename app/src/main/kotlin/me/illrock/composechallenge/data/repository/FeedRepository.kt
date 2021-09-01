@@ -8,7 +8,6 @@ import me.illrock.composechallenge.data.preference.PreferencesManager
 import me.illrock.composechallenge.data.provider.SystemClockProvider
 import me.illrock.composechallenge.data.response.FeedResponse
 import me.illrock.composechallenge.utils.fromJson
-import me.illrock.composechallenge.utils.print
 import me.illrock.composechallenge.utils.toJson
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,10 +27,6 @@ class FeedRepository @Inject constructor(
 
     private fun getFromNetwork() = apiService.getFeed()
         .doOnSuccess { updateCache(it) }
-        .onErrorResumeNext {
-            it.print()
-            getFromDb()
-        }
 
     private fun getFromDbOrNetwork(): Single<FeedResponse> {
         return if (isOutdated()) getFromNetwork()

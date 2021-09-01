@@ -1,10 +1,8 @@
-package me.illrock.composechallenge.presentation.feed
+package me.illrock.composechallenge.presentation.feed.mvvm
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import me.illrock.composechallenge.data.entity.feed.card.BaseCard
 import me.illrock.composechallenge.data.entity.feed.card.TextCard
 import me.illrock.composechallenge.data.entity.feed.card.content.TextContent
 import org.junit.Rule
@@ -26,15 +24,14 @@ class FeedComposeFragmentTest {
 
     @Test
     fun cardList() {
-        val cards = mutableStateOf<List<BaseCard>>(listOf())
         val anotherTitle = "Another title"
-        composeTestRule.setContent {
-            CardList(cards)
-        }
-        cards.value = listOf(
+        val cards = listOf(
             TextCard(createTextContent()),
             TextCard(createTextContent(anotherTitle))
         )
+        composeTestRule.setContent {
+            CardList(cards)
+        }
         composeTestRule.onNodeWithText(MOCK_TITLE)
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(anotherTitle)
